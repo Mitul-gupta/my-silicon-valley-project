@@ -4,9 +4,9 @@ namespace SpriteKind {
 function ememydeath (enemy: Sprite) {
     enemy.destroy(effects.fire, 500)
     if (Math.percentChance(40)) {
-        PowerUp = sprites.create(assets.image`powerup`, SpriteKind.PowerUp)
-        PowerUp.x = enemy.x
-        PowerUp.y = enemy.y
+        PowerUP1 = sprites.create(assets.image`powerup`, SpriteKind.PowerUp)
+        PowerUP1.x = enemy.x
+        PowerUP1.y = enemy.y
     }
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -47,15 +47,16 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, UFO, 200, 0)
-        null.y += 5
+        projectile.x += 10
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.PowerUp, function (sprite, otherSprite) {
     doublefiremode = sprites.create(assets.image`Doublebullets`, SpriteKind.Player)
-    doublefiremode.setPosition(37, 6)
+    doublefiremode.setPosition(54, 8)
 })
 statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
     ememydeath(status.spriteAttachedTo())
+    music.powerUp.play()
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprite.destroy()
@@ -73,7 +74,7 @@ let statusbar: StatusBarSprite = null
 let ememy: Sprite = null
 let doublefiremode: Sprite = null
 let projectile: Sprite = null
-let PowerUp: Sprite = null
+let PowerUP1: Sprite = null
 let UFO: Sprite = null
 effects.starField.startScreenEffect()
 UFO = sprites.create(assets.image`UFO`, SpriteKind.Player)
