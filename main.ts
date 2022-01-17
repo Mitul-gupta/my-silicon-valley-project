@@ -1,12 +1,18 @@
 namespace SpriteKind {
     export const PowerUp = SpriteKind.create()
+    export const powerup1 = SpriteKind.create()
 }
 function ememydeath (enemy: Sprite) {
     enemy.destroy(effects.fire, 500)
-    if (Math.percentChance(40)) {
+    if (Math.percentChance(24)) {
         PowerUP1 = sprites.create(assets.image`powerup`, SpriteKind.PowerUp)
         PowerUP1.x = enemy.x
         PowerUP1.y = enemy.y
+    }
+    if (Math.percentChance(23)) {
+        Powerup2 = sprites.create(assets.image`3 hearts`, SpriteKind.powerup1)
+        Powerup2.x = enemy.x
+        Powerup2.y = enemy.y
     }
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -28,35 +34,24 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, UFO, 200, 0)
-    if (doublefiremode) {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . 2 2 2 2 2 2 2 2 2 2 2 . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, UFO, 200, 0)
+    if (triplefiremode && triplefiremode.lifespan > 0) {
+        projectile = sprites.createProjectileFromSprite(assets.image`Doublebullets`, UFO, 200, 0)
         projectile.x += 10
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.PowerUp, function (sprite, otherSprite) {
-    doublefiremode = sprites.create(assets.image`Doublebullets`, SpriteKind.Player)
-    doublefiremode.setPosition(54, 8)
+    triplefiremode = sprites.create(assets.image`bullet`, SpriteKind.Player)
+    triplefiremode.setPosition(54, 8)
+    triplefiremode.lifespan = 10000
+    otherSprite.destroy()
 })
 statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
     ememydeath(status.spriteAttachedTo())
     music.powerUp.play()
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.powerup1, function (sprite, otherSprite) {
+    info.changeLifeBy(3)
+    otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprite.destroy()
@@ -72,8 +67,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let statusbar: StatusBarSprite = null
 let ememy: Sprite = null
-let doublefiremode: Sprite = null
+let triplefiremode: Sprite = null
 let projectile: Sprite = null
+let Powerup2: Sprite = null
 let PowerUP1: Sprite = null
 let UFO: Sprite = null
 effects.starField.startScreenEffect()
